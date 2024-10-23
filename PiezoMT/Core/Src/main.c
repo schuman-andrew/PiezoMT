@@ -89,8 +89,8 @@ int main(void)
   MX_GPIO_Init();
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
-  HAL_TIM_Base_Start(&htim3); //need timer oc start
-
+  //HAL_TIM_Base_Start(&htim3); //need timer oc start
+  HAL_TIM_OC_Start(&htim3, TIM_CHANNEL_1);
 
   /* USER CODE END 2 */
 
