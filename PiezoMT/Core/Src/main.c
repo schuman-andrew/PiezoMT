@@ -18,11 +18,13 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "cmsis_os.h"
 #include "tim.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include <stdbool.h>
 
 /* USER CODE END Includes */
 
@@ -44,12 +46,15 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+static bool button = true;
 
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
+void MX_FREERTOS_Init(void);
 /* USER CODE BEGIN PFP */
+void timerSetVolume(uint32_t vol);
 
 /* USER CODE END PFP */
 
@@ -89,15 +94,53 @@ int main(void)
   MX_GPIO_Init();
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
+
   //HAL_TIM_Base_Start(&htim3); //need timer oc start
-  HAL_TIM_OC_Start(&htim3, TIM_CHANNEL_1);
+  //HAL_TIM_OC_Start(&htim3, TIM_CHANNEL_1);
 
   /* USER CODE END 2 */
 
+  /* Init scheduler */
+  //osKernelInitialize();
+
+  /* Call init function for freertos objects (in cmsis_os2.c) */
+  //MX_FREERTOS_Init();
+
+  /* Start scheduler */
+  //osKernelStart();
+
+  /* We should never get here as control is now taken by the scheduler */
+
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  //HAL_TIM_OC_Start(&htim3, TIM_CHANNEL_1);
+  HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
+  int32_t CH1_DC = 0;
+  uint32_t volume = 600;
+
   while (1)
   {
+	  //timerSetVolume(volume);
+	  volume -= 50;
+	  //__HAL_TIM_SET_COMPARE(&htim3,TIM_CHANNEL_1, (volume));
+	  timerSetVolume(volume);
+	  HAL_Delay(200);
+
+	  /*if(button == true){
+		  TIM3->CCR1 = CH1_DC;
+		  CH1_DC += 70;
+		  HAL_Delay(300);
+	  }
+	  else {
+		  TIM3->CCR1 = CH1_DC;
+		  CH1_DC -= 70;
+		  HAL_Delay(300);
+	  }
+		  /*HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
+		  HAL_Delay(200);
+		  HAL_TIM_PWM_Stop(&htim3, TIM_CHANNEL_1);
+		  HAL_Delay(200);
+		  }*/
 
 
     /* USER CODE END WHILE */
@@ -154,8 +197,26 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+  /* Prevent unused argument(s) compilation warning */
+  UNUSED(GPIO_Pin);
+  /* NOTE: This function Should not be modified, when the callback is needed,
+           the HAL_GPIO_EXTI_Callback could be implemented in the user file
+   */
+  if(button == true){
+	  button = false;
+  } else if(button == false)
+	  button = true;
+}
 
 /* USER CODE END 4 */
+
+void timerSetVolume(uint32_t vol){
+	HAL_TIM_PWM_Stop(&htim3, TIM_CHANNEL_1);
+	htim3.Instance->CCR1 = vol;
+	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
+}
 
 /**
   * @brief  Period elapsed callback in non blocking mode
