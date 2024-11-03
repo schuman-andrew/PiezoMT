@@ -47,6 +47,8 @@
 
 /* USER CODE BEGIN PV */
 static bool button = true;
+static uint32_t volume = 0;
+static bool up = true;
 
 /* USER CODE END PV */
 
@@ -116,15 +118,16 @@ int main(void)
   //HAL_TIM_OC_Start(&htim3, TIM_CHANNEL_1);
   HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
   int32_t CH1_DC = 0;
-  uint32_t volume = 600;
 
   while (1)
   {
 	  //timerSetVolume(volume);
-	  volume -= 50;
-	  //__HAL_TIM_SET_COMPARE(&htim3,TIM_CHANNEL_1, (volume));
-	  timerSetVolume(volume);
-	  HAL_Delay(200);
+	  /*if(volume < 1100){
+		  volume += 5;
+	  }
+	  __HAL_TIM_SET_COMPARE(&htim3,TIM_CHANNEL_1, (volume));
+	  //timerSetVolume(volume);
+	  HAL_Delay(200);*/
 
 	  /*if(button == true){
 		  TIM3->CCR1 = CH1_DC;
@@ -204,19 +207,28 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
   /* NOTE: This function Should not be modified, when the callback is needed,
            the HAL_GPIO_EXTI_Callback could be implemented in the user file
    */
-  if(button == true){
+  if(GPIO_Pin == BLUE_Pin){
+	  if(up == false){
+		  volume -= 5;
+	  } else if(up == true){
+		  volume += 5;
+	  }
+	  if(volume == 0){
+		  up = true;
+	  }
+	  if(volume == 50){
+		  up = false;
+	  }
+	  __HAL_TIM_SET_COMPARE(&htim3,TIM_CHANNEL_1, (volume));
+  }
+
+  /*if(button == true){
 	  button = false;
   } else if(button == false)
-	  button = true;
+	  button = true;*/
 }
 
 /* USER CODE END 4 */
-
-void timerSetVolume(uint32_t vol){
-	HAL_TIM_PWM_Stop(&htim3, TIM_CHANNEL_1);
-	htim3.Instance->CCR1 = vol;
-	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
-}
 
 /**
   * @brief  Period elapsed callback in non blocking mode

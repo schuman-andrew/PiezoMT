@@ -48,7 +48,6 @@ void MX_TIM3_Init(void)
   htim3.Init.Period = 1135;
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
-
   if (HAL_TIM_Base_Init(&htim3) != HAL_OK)
   {
     Error_Handler();
