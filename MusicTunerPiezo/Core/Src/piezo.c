@@ -20,6 +20,9 @@
 static int volume = 10;
 static int volChange = 5;
 
+//timers 2, 3, 5, 12 in order
+char* global_piezos[4] = {"OFF", "OFF", "OFF", "OFF"};
+
 /**
  @brief sets all timer volume to 15 and stops all timers
  */
@@ -159,3 +162,56 @@ void volumeDown(){
 	//printf("Vol down - %d\n", volume);
 }
 
+/**
+ @brief selects an available piezo to play the note on and plays the note
+ @param note -> note to be played on piezo
+ @return 0 if a piezo was available and is playing the note
+         1 if all piezos were already in use and the note is not playing
+ */
+uint8_t piezoSelectOn(char * note) {
+	char* piezo_note;
+	for(uint8_t i = 0; i < 4; i++) {
+		piezo_note = global_piezos[i];
+		if(strcmp(piezo_note, "OFF") == 0) {
+			if(i == 0) {
+				playNoteTIM2(note, true);
+			} else if (i == 1) {
+				playNoteTIM3(note, true);
+			} else if (i == 2) {
+				playNoteTIM5(note, true);
+			} else {
+				playNoteTIM12(note, true);
+			}
+			global_piezos[i] = note;
+			return 0;
+		}
+	}
+	return 1;
+}
+
+/**
+ @brief finds which piezo is playing the note and turns it off
+ @param note -> note to be turned off
+ @return 0 if a piezo playing the note was found and turned off
+         1 if a piezo playing the note was not found and nothing was turned off
+ */
+uint8_t piezoSelectOff(char * note) {
+	char* piezo_note;
+	for(uint8_t i = 0; i < 4; i++) {
+		piezo_note = global_piezos[i];
+		if(strcmp(piezo_note, note) == 0) {
+			if(i == 0) {
+				playNoteTIM2(note, false);
+			} else if (i == 1) {
+				playNoteTIM3(note, false);
+			} else if (i == 2) {
+				playNoteTIM5(note, false);
+			} else {
+				playNoteTIM12(note, false);
+			}
+			global_piezos[i] = "OFF";
+			return 0;
+		}
+	}
+	return 1;
+}
