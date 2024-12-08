@@ -1,0 +1,5 @@
+../Core/Src/pitchmap.c:50:8:getFreq	32	static
+../Core/Src/pitchmap.c:72:6:initializeNoteFrequencies	24	static
+../Core/Src/pitchmap.c:88:15:mapFrequencyToClosest	72	static
+../Core/Src/pitchmap.c:107:8:calculateCents	24	static
+../Core/Src/pitchmap.c:114:8:calculatePercentageError	32	static

@@ -1,0 +1,5 @@
+../Core/Src/pitchmap.c:50:8:getFreq	3
+../Core/Src/pitchmap.c:72:6:initializeNoteFrequencies	2
+../Core/Src/pitchmap.c:88:15:mapFrequencyToClosest	3
+../Core/Src/pitchmap.c:107:8:calculateCents	1
+../Core/Src/pitchmap.c:114:8:calculatePercentageError	1
