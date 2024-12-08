@@ -134,24 +134,44 @@ int main(void)
 
   while (1)
   {
-	  playNoteTIM2("A4 ", true);
-	  playNoteTIM3("G2 ", false);
-	  playNoteTIM5("B2 ", false);
-	  playNoteTIM12("D2 ", false);
-	  //stopAll();
+//	  playNoteTIM2("A4 ", true);
+//	  playNoteTIM3("G2 ", false);
+//	  playNoteTIM5("B2 ", false);
+//	  playNoteTIM12("D2 ", false);
+//	  //stopAll();
+//	  HAL_Delay(1500);
+//
+//	  playNoteTIM2("A4 ", true);
+//	  playNoteTIM3("G4 ", true);
+//	  playNoteTIM5("B4 ", true);
+//	  playNoteTIM12("D4 ", true);
+//	  HAL_Delay(1500);
+//
+//	  playNoteTIM2("A2 ", true);
+//	  playNoteTIM3("G2 ", true);
+//	  playNoteTIM5("B2 ", true);
+//	  playNoteTIM12("D2 ", true);
+//	  HAL_Delay(1500);
+
+	  piezoSelectOn("G3 ");
+	  HAL_Delay(500);
+	  piezoSelectOn("D4 ");
+	  HAL_Delay(500);
+	  piezoSelectOn("G4 ");
+	  HAL_Delay(500);
+	  piezoSelectOn("B4 ");
 	  HAL_Delay(1500);
 
-	  playNoteTIM2("A4 ", true);
-	  playNoteTIM3("G4 ", true);
-	  playNoteTIM5("B4 ", true);
-	  playNoteTIM12("D4 ", true);
+	  piezoSelectOff("B4 ");
+	  HAL_Delay(500);
+	  piezoSelectOff("G4 ");
+	  HAL_Delay(500);
+	  piezoSelectOff("D4 ");
+	  HAL_Delay(500);
+	  piezoSelectOff("G3 ");
 	  HAL_Delay(1500);
 
-	  playNoteTIM2("A2 ", true);
-	  playNoteTIM3("G2 ", true);
-	  playNoteTIM5("B2 ", true);
-	  playNoteTIM12("D2 ", true);
-	  HAL_Delay(1500);
+
 
 	  /*
 
